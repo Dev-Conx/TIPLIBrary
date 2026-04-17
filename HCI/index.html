@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIP Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<div id="authScreen">
+<div class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="auth-badge">TIP</div>
+      <div class="auth-name">Study Hub</div>
+    </div>
+    <div class="auth-sub">Technological Institute of the Philippines — Academic Planner</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="aTabLogin" onclick="showAuthTab('login')">Sign In</button>
+      <button class="auth-tab" id="aTabRegister" onclick="showAuthTab('register')">Register</button>
+      <button class="auth-tab" id="aTabForgot" onclick="showAuthTab('forgot')">Forgot PW</button>
+    </div>
+
+    <div id="loginForm">
+      <div class="auth-title">Welcome back 👋</div>
+      <div class="auth-desc">Sign in to your TIP Study Hub account</div>
+      <div class="fg"><label>Email Address</label><input type="email" id="lEmail" placeholder="@tip.edu.ph"></div>
+      <div class="fg"><label>Password</label><input type="password" id="lPass" placeholder="Password"></div>
+      <button class="btn btn-primary" onclick="doLogin()">Sign In</button>
+      <div class="auth-footer">No account? <span onclick="showAuthTab('register')">Register here</span></div>
+    </div>
+
+    <div id="registerForm" class="hidden">
+      <div class="auth-title">Create account</div>
+      <div class="auth-desc">Join TIP Study Hub today</div>
+      <div class="fg"><label>Full Name</label><input type="text" id="rName" placeholder="Full Name"></div>
+      <div class="fg"><label>Email Address</label><input type="email" id="rEmail" placeholder="@tip.edu.ph"></div>
+      <div class="row2">
+        <div class="fg"><label>Year Level</label>
+          <select id="rYear">
+            <option selected>1st Year College</option><option>2nd Year College</option>
+            <option>3rd Year College</option><option>4th Year College</option>
+          </select>
+        </div>
+        <div class="fg"><label>Course</label><input type="text" id="rCourse" placeholder="BS ComE"></div>
+      </div>
+      <div class="fg"><label>Password</label><input type="password" id="rPass" placeholder="At least 6 characters"></div>
+      <button class="btn btn-primary" onclick="doRegister()">Create Account</button>
+      <div class="auth-footer">Already registered? <span onclick="showAuthTab('login')">Sign In</span></div>
+    </div>
+
+    <div id="forgotForm" class="hidden">
+      <div class="auth-title">Reset password</div>
+      <div class="auth-desc">Enter your email to receive a reset link</div>
+      <div class="fg"><label>Email Address</label><input type="email" id="fEmail" placeholder="juan@tip.edu.ph"></div>
+      <button class="btn btn-primary" onclick="doForgot()">Send Reset Link</button>
+      <div class="auth-footer"><span onclick="showAuthTab('login')">← Back to Sign In</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="appShell" class="hidden">
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sb-header">
+      <div class="sb-brand"><div class="sb-badge">TIP</div><div class="sb-bname">Study Hub</div></div>
+      <div class="sb-sub">Academic Planner</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-sec">Main</div>
+      <div class="sb-item active" data-page="dashboard" onclick="showPage('dashboard')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </div>
+      <div class="sb-item" data-page="planner" onclick="showPage('planner')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Study Planner
+      </div>
+      <div class="sb-item" data-page="tasks" onclick="showPage('tasks')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Tasks <span class="sb-badge2" id="taskBadge" style="display:none">0</span>
+      </div>
+      <div class="sb-sec">Academic</div>
+      <div class="sb-item" data-page="progress" onclick="showPage('progress')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        Progress Tracking
+      </div>
+      <div class="sb-item" data-page="analytics" onclick="showPage('analytics')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21H3M21 7l-9 9-4-4-5 5"/></svg>
+        Analytics
+      </div>
+      <div class="sb-item" data-page="goals" onclick="showPage('goals')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Goals
+      </div>
+      <div class="sb-sec">Tools</div>
+      <div class="sb-item" data-page="notes" onclick="showPage('notes')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Notes
+      </div>
+      <div class="sb-item" data-page="timer" onclick="showPage('timer')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Study Timer
+      </div>
+      <div class="sb-item" data-page="achievements" onclick="showPage('achievements')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15l-4 4h8l-4-4z"/><path d="M8.5 8.5S7 7 5 7c0 2.5 1.5 4.5 4 5.5M15.5 8.5S17 7 19 7c0 2.5-1.5 4.5-4 5.5"/></svg>
+        Achievements
+      </div>
+      <div class="sb-sec">Account</div>
+      <div class="sb-item" data-page="profile" onclick="showPage('profile')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </div>
+      <div class="sb-item" data-page="settings" onclick="showPage('settings')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-avatar" id="sbAvatar">?</div>
+        <div><div class="sb-uname" id="sbName">–</div><div class="sb-urole" id="sbRole">–</div></div>
+      </div>
+      <div class="sb-logout" onclick="doLogout()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <span class="tb-title" id="tbTitle">Dashboard</span>
+      <div class="tb-right">
+        <div style="position:relative">
+          <button class="tb-notif" onclick="toggleNotif()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span class="tb-notif-dot"></span>
+          </button>
+          <div class="notif-panel" id="notifPanel">
+            <div class="notif-head"><span class="notif-title">Notifications</span><span class="notif-clear" onclick="notifItems=[];buildNotifs()">Clear all</span></div>
+            <div id="notifList"><div class="notif-empty">No notifications yet</div></div>
+          </div>
+        </div>
+        <button class="tb-dark" onclick="toggleDark()" title="Toggle dark mode"><span id="tbDarkIcon">◑</span></button>
+        <div class="tb-user" onclick="showPage('profile')">
+          <div class="tb-uavatar" id="tbAvatar">?</div>
+          <span class="tb-uname" id="tbName">–</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page active" id="page-dashboard">
+      <div class="welcome-card">
+        <div class="welcome-title" id="welcomeTitle">Hello! 👋</div>
+        <div class="welcome-sub">Here's your study overview for today.</div>
+        <div class="welcome-btns">
+          <button class="wbtn wbtn-primary" onclick="showPage('planner');openAddSession()">+ Plan Session</button>
+          <button class="wbtn wbtn-ghost" onclick="showPage('progress')">↑ View Progress</button>
+          <button class="wbtn wbtn-ghost" onclick="showPage('settings')">⚙ Settings</button>
+        </div>
+      </div>
+      <div class="grid4">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--yellow-bg)">⏱</div><div class="stat-num" id="statHours">0h</div><div class="stat-lbl">Hours Studied</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">✅</div><div class="stat-num" id="statDone">0</div><div class="stat-lbl">Tasks Completed</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--red-bg)">⚠️</div><div class="stat-num" id="statMissing">0</div><div class="stat-lbl">Overdue Tasks</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">🔥</div><div class="stat-num" id="statStreak">⭐ 0</div><div class="stat-lbl">Study Streak</div></div>
+      </div>
+      <div class="pending-row">
+        <div class="stat-card pending-stat"><div class="stat-icon" style="background:#FFF7ED">⏳</div><div class="stat-num" id="statPend">0</div><div class="stat-lbl">Pending Tasks</div></div>
+      </div>
+      <div class="motiv-card">
+        <div class="motiv-icon">💡</div>
+        <div><div class="motiv-text">"Success is the sum of small efforts, repeated day in and day out."</div><div class="motiv-quote">Stay consistent, stay focused.</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div class="card-title" style="margin:0">📅 Today's Study Plan</div>
+            <span style="font-size:12px;color:var(--text2)" id="todayCount">0 sessions</span>
+          </div>
+          <div id="todaySessions"></div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-title" style="text-align:center">Progress Overview</div>
+            <div style="position:relative;height:155px;display:flex;align-items:center;justify-content:center">
+              <canvas id="dashDonutChart"></canvas>
+              <div style="position:absolute;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--text)" id="dashPct">0%</div><div style="font-size:11px;color:var(--text2)">Done</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">📌 Upcoming Sessions</div>
+            <div id="upcomingSessions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-planner">
+      <div class="pg-head"><div class="pg-title">Study Planner</div><div class="pg-sub">Schedule and manage your study sessions</div></div>
+      <div class="action-row">
+        <div class="view-tabs">
+          <button class="vtab active" onclick="switchPlannerView('list',this)">List View</button>
+          <button class="vtab" onclick="switchPlannerView('cal',this)">Calendar View</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openAddSession()">+ Add Session</button>
+      </div>
+      <div id="plannerList"><div class="card"><div id="sessionsList"></div></div></div>
+      <div id="plannerCal" class="hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <button class="btn btn-outline btn-sm" onclick="prevMonth()">← Prev</button>
+            <span style="font-size:14px;font-weight:700;color:var(--text)" id="calMonthLabel"></span>
+            <button class="btn btn-outline btn-sm" onclick="nextMonth()">Next →</button>
+          </div>
+          <div class="cal-grid" id="calendarGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-tasks">
+      <div class="pg-head"><div class="pg-title">Task Management</div><div class="pg-sub">Track and manage your academic tasks</div></div>
+      <div class="action-row">
+        <div class="search-bar" style="flex:1;max-width:300px">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="taskSearch" placeholder="Search tasks..." oninput="taskFilters.text=this.value;renderTasks()">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openAddTask()">+ Add Task</button>
+      </div>
+      <div class="filter-row">
+        <select class="fselect" id="taskStatusFilter" onchange="taskFilters.status=this.value;renderTasks()">
+          <option value="">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="overdue">Overdue</option>
+          <option value="late">Late (done late)</option>
+        </select>
+        <select class="fselect" id="taskPriorityFilter" onchange="taskFilters.priority=this.value;renderTasks()">
+          <option value="">All Priority</option><option>High</option><option>Medium</option><option>Low</option>
+        </select>
+        <select class="fselect" id="taskSubjectFilter" onchange="taskFilters.subject=this.value;renderTasks()"></select>
+        <button class="btn btn-outline btn-sm" onclick="clearTaskFilters()">✕ Clear</button>
+      </div>
+      <div class="card"><div id="tasksList"></div></div>
+    </div>
+
+    <div class="page" id="page-progress">
+      <div class="pg-head"><div class="pg-title">Progress Tracking</div><div class="pg-sub">Monitor your academic achievements and goals</div></div>
+      <div class="filter-row">
+        <select class="fselect" id="progressSubjectFilter" onchange="renderProgress()"></select>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="card mb14"><div class="card-title">Subject Progress</div><div id="subjectProgressList"></div></div>
+          <div class="card"><div class="card-title">📋 Sessions & Topics by Subject</div><div id="topicsList"></div></div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-title" style="text-align:center">Completion Status</div>
+            <div style="position:relative;height:175px;display:flex;align-items:center;justify-content:center">
+              <canvas id="progressDonutChart"></canvas>
+              <div style="position:absolute;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--text)" id="progressPct">0%</div><div style="font-size:11px;color:var(--text2)" id="progressPendCount">Done · Pending: 0</div></div>
+            </div>
+          </div>
+          <div class="card"><div class="card-title">📈 Weekly Study Hours</div><div style="height:180px;margin-top:8px"><canvas id="trendChart"></canvas></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-analytics">
+      <div class="pg-head"><div class="pg-title">Analytics</div><div class="pg-sub">Visualize your study patterns and performance</div></div>
+      <div class="grid2 mb14">
+        <div class="card"><div class="card-title">Study Hours This Week</div><div style="height:190px;margin-top:6px"><canvas id="hoursBarChart"></canvas></div></div>
+        <div class="card"><div class="card-title">Task Status Breakdown</div><div style="height:170px;display:flex;align-items:center;justify-content:center"><canvas id="tasksPieChart"></canvas></div></div>
+      </div>
+      <div class="card"><div class="card-title">Actual vs Planned Hours (Monthly)</div><div style="height:200px;margin-top:6px"><canvas id="weeklyCompareChart"></canvas></div></div>
+    </div>
+
+    <div class="page" id="page-goals">
+      <div class="pg-head"><div class="pg-title">Goals</div><div class="pg-sub">Set and track your daily and weekly goals</div></div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:13px">
+        <button class="btn btn-primary btn-sm" onclick="openAddGoal()">+ Add Goal</button>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="card mb14"><div class="card-title">🎯 Daily Goals</div><div id="dailyGoalsList"></div></div>
+          <div class="card"><div class="card-title">📅 Weekly Goals</div><div id="weeklyGoalsList"></div></div>
+        </div>
+        <div>
+          <div class="streak-card mb14">
+            <div class="streak-emoji" id="streakFireGoals">⭐</div>
+            <div class="streak-num" id="streakNum">0</div>
+            <div class="streak-label">Day Study Streak</div>
+            <div class="streak-subtext" id="streakMsg">Start studying to build your streak!</div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="text-align:center">Goal Completion</div>
+            <div style="position:relative;height:140px;display:flex;align-items:center;justify-content:center">
+              <canvas id="goalsDonutChart"></canvas>
+              <div style="position:absolute;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--text)" id="goalsPct">0%</div><div style="font-size:11px;color:var(--text2)">Complete</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-notes">
+      <div class="pg-head"><div class="pg-title">Notes & Study Materials</div><div class="pg-sub">Organize your notes by subject and topic</div></div>
+      <div class="action-row">
+        <div style="display:flex;gap:8px">
+          <div class="search-bar" style="max-width:270px">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="noteSearch" placeholder="Search notes..." oninput="noteFilters.text=this.value;renderNotes()">
+          </div>
+          <select class="fselect" id="noteSubjectFilter" onchange="noteFilters.subject=this.value;renderNotes()"></select>
+          <button class="btn btn-outline btn-sm" onclick="clearNoteFilters()">✕</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openAddNote()">+ Add Note</button>
+      </div>
+      <div id="notesList"></div>
+    </div>
+
+    <div class="page" id="page-timer">
+      <div class="pg-head"><div class="pg-title">Study Timer</div><div class="pg-sub">Track your actual study time in real time</div></div>
+      <div class="two-col">
+        <div>
+          <div class="card mb14" style="text-align:center;padding:24px">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text2);margin-bottom:8px">Session Timer</div>
+            <div class="timer-display" id="timerDisplay">00:00:00</div>
+            <div style="font-size:12.5px;font-weight:600;margin-bottom:14px" id="timerStatus" style="color:var(--text2)">Ready</div>
+            <div style="margin-bottom:18px">
+              <select class="fselect" id="timerSubject" style="min-width:200px;font-size:13.5px;padding:9px 38px 9px 13px"></select>
+            </div>
+            <div class="timer-controls">
+              <button class="btn btn-primary btn-sm" id="timerStartBtn" onclick="timerStart()" style="width:auto">▶ Start</button>
+              <button class="btn btn-outline btn-sm" id="timerPauseBtn" onclick="timerPause()" disabled>⏸ Pause</button>
+              <button class="btn btn-outline btn-sm" id="timerStopBtn" onclick="timerStop()" disabled>⏹ Stop & Log</button>
+              <button class="btn btn-outline btn-sm" onclick="timerFullReset()">↺ Reset</button>
+            </div>
+
+            <div class="break-panel hidden" id="breakPanel">
+              <div class="break-title">☕ Break Timer</div>
+              <div class="break-display" id="breakDisplay">00:00</div>
+              <div class="break-track"><div class="break-fill" id="breakProgress" style="width:0%"></div></div>
+              <button class="btn btn-outline btn-sm" onclick="breakStop()" style="margin-top:10px;width:100%">End Break Early</button>
+            </div>
+
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+              <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px">☕ Break Presets</div>
+              <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" onclick="startBreak(300)">5 min Break</button>
+                <button class="btn btn-outline btn-sm" onclick="startBreak(600)">10 min Break</button>
+                <button class="btn btn-outline btn-sm" onclick="startBreak(900)">15 min Break</button>
+                <button class="btn btn-outline btn-sm" onclick="startBreak(1800)">30 min Break</button>
+              </div>
+              <div style="font-size:11.5px;color:var(--text2);margin-top:8px">Study timer pauses during break. Resumes after.</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Actual vs Planned Hours Per Subject</div>
+            <div style="height:180px;margin-top:6px"><canvas id="timerBarChart"></canvas></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Session Log & Plan Comparison</div>
+          <div id="timerLog"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-achievements">
+      <div class="pg-head"><div class="pg-title">Achievements</div><div class="pg-sub">Earn badges by hitting milestones</div></div>
+      <div class="streak-card mb14">
+        <div style="display:flex;align-items:center;gap:20px">
+          <div>
+            <div style="font-size:36px;line-height:1" id="streakFire">⭐</div>
+            <div class="streak-num" id="streakNum2">0</div>
+            <div style="font-size:12px;font-weight:700;margin-top:3px" id="streakFireLabel">Just Started</div>
+            <div class="ach-streak-day">Day Streak</div>
+          </div>
+          <div class="ach-streak-side">
+            <div class="ach-streak-msg" id="streakMsg2">Start studying to build your streak!</div>
+            <div style="height:7px;background:rgba(255,255,255,.1);border-radius:20px">
+              <div id="streakBar" style="height:100%;width:0%;border-radius:20px;transition:all .6s"></div>
+            </div>
+            <div class="ach-streak-progress-label" id="streakBarLabel">0/3 days to "Warming Up"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb14">
+        <div class="card-title">🔥 Streak Fire Levels</div>
+        <div class="fire-levels" id="fireLevelsPreview"></div>
+      </div>
+
+      <div class="badge-grid" id="badgeGrid"></div>
+    </div>
+
+    <div class="page" id="page-profile">
+      <div class="pg-head"><div class="pg-title">My Profile</div><div class="pg-sub">Manage your account information</div></div>
+      <div class="profile-head">
+        <div class="profile-av" id="profileAv">?</div>
+        <div>
+          <div style="font-size:18px;font-weight:800;color:var(--text)" id="profileName">–</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:2px" id="profileSub">–</div>
+          <div id="profileSubjectTags" style="margin-top:8px"></div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="card mb14">
+            <div class="card-title">Edit Profile</div>
+            <div class="fg"><label>Full Name</label><input type="text" id="editName"></div>
+            <div class="fg"><label>Email</label><input type="email" id="editEmail"></div>
+            <div class="row2">
+              <div class="fg"><label>Year Level</label><select id="editYear"><option>1st Year College</option><option>2nd Year College</option><option>3rd Year College</option><option>4th Year College</option></select></div>
+              <div class="fg"><label>Course</label><input type="text" id="editCourse"></div>
+            </div>
+            <button class="btn btn-primary" style="width:auto;padding:9px 22px" onclick="saveProfile()">Save Changes</button>
+          </div>
+          <div class="card">
+            <div class="card-title">Change Password</div>
+            <div class="fg"><label>Current Password</label><input type="password" id="curPass" placeholder="••••••••"></div>
+            <div class="fg"><label>New Password</label><input type="password" id="newPass" placeholder="••••••••"></div>
+            <div class="fg"><label>Confirm New Password</label><input type="password" id="confPass" placeholder="••••••••"></div>
+            <button class="btn btn-outline" style="width:100%" onclick="changePassword()">Update Password</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">My Subjects</div>
+          <div style="font-size:12.5px;color:var(--text2);margin-bottom:10px">Add your subjects. Each gets a unique color used throughout the app.</div>
+          <div id="profileSubjectTags2" style="margin-bottom:12px"></div>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="newSubjectInput" placeholder="e.g. Calculus 2" style="flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--card);font-family:inherit;outline:none;transition:border .2s" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')addSubject()">
+            <button class="btn btn-primary btn-sm" onclick="addSubject()" style="width:auto">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-settings">
+      <div class="pg-head"><div class="pg-title">Settings</div><div class="pg-sub">Customize your TIP Study Hub experience</div></div>
+      <div class="settings-sec">
+        <div class="settings-title">Appearance</div>
+        <div class="setting-row">
+          <div><div class="setting-label">Dark Mode</div><div class="setting-desc">Switch to dark theme</div></div>
+          <label class="toggle"><input type="checkbox" id="darkToggleSetting" onchange="toggleDark()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+        </div>
+      </div>
+      <div class="settings-sec">
+        <div class="settings-title">Notifications</div>
+        <div class="setting-row"><div><div class="setting-label">Session Reminders</div><div class="setting-desc">Get notified before study sessions</div></div><label class="toggle"><input type="checkbox" id="setSessionReminders" onchange="saveSettings()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        <div class="setting-row"><div><div class="setting-label">Task Deadline Alerts</div><div class="setting-desc">Reminders for upcoming deadlines</div></div><label class="toggle"><input type="checkbox" id="setTaskAlerts" onchange="saveSettings()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        <div class="setting-row"><div><div class="setting-label">Overdue & Missing Alerts</div><div class="setting-desc">Highlight and notify overdue or unfinished tasks</div></div><label class="toggle"><input type="checkbox" id="setMissingAlerts" onchange="saveSettings()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        <div class="setting-row"><div><div class="setting-label">Streak Alerts</div><div class="setting-desc">Don't let your streak break!</div></div><label class="toggle"><input type="checkbox" id="setStreakAlerts" onchange="saveSettings()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        <div class="setting-row">
+          <div style="flex:1">
+            <div class="setting-label">Reminder Email</div>
+            <div class="setting-desc">Use this email for reminder logs and exports</div>
+          </div>
+          <input type="email" id="setReminderEmail" class="setting-email-input" placeholder="your-email@example.com" onblur="saveSettings()">
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">Send Reminder Digest</div><div class="setting-desc">Open your email app with pending and overdue tasks summary</div></div>
+          <button class="btn btn-outline btn-sm" onclick="sendReminderDigest()">Send Digest</button>
+        </div>
+      </div>
+      <div class="settings-sec">
+        <div class="settings-title">Study Preferences</div>
+        <div class="setting-row"><div><div class="setting-label">Default Session Duration</div></div><select class="fselect" id="setDefaultDuration" onchange="saveSettings()"><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60">60 minutes</option><option value="90">90 minutes</option><option value="120">120 minutes</option></select></div>
+        <div class="setting-row"><div><div class="setting-label">Default Break Duration</div><div class="setting-desc">Quick access break button preference</div></div><select class="fselect" id="setDefaultBreak" onchange="saveSettings()"><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option><option value="1800">30 minutes</option></select></div>
+        <div class="setting-row"><div><div class="setting-label">Week Starts On</div><div class="setting-desc">Used in schedule and analytics views</div></div><select class="fselect" id="setWeekStarts" onchange="saveSettings()"><option value="monday">Monday</option><option value="sunday">Sunday</option></select></div>
+        <div class="setting-row"><div><div class="setting-label">Focus Sound</div><div class="setting-desc">Play a short cue when timer starts or ends</div></div><label class="toggle"><input type="checkbox" id="setFocusSound" onchange="saveSettings()"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        <div class="setting-row"><div><div class="setting-label">Default Task Priority</div><div class="setting-desc">Auto-select priority when adding new tasks</div></div><select class="fselect" id="setDefaultTaskPriority" onchange="saveSettings()"><option>High</option><option selected>Medium</option><option>Low</option></select></div>
+        <div class="setting-row"><div><div class="setting-label">Upcoming Alert Window</div><div class="setting-desc">How early to remind upcoming deadlines</div></div><select class="fselect" id="setDeadlineLeadMinutes" onchange="saveSettings()"><option value="30">30 minutes</option><option value="60">1 hour</option><option value="180">3 hours</option><option value="720">12 hours</option><option value="1440">1 day</option></select></div>
+      </div>
+      <div class="settings-sec">
+        <div class="settings-title">Account & Data</div>
+        <div class="setting-row"><div><div class="setting-label">Export My Data</div><div class="setting-desc">Download your profile, tasks, sessions, goals, notes and logs as JSON</div></div><button class="btn btn-outline btn-sm" onclick="exportUserData()">Export</button></div>
+        <div class="setting-row"><div><div class="setting-label">Clear All Data</div><div class="setting-desc">Permanently delete all your sessions, tasks, notes and goals</div></div><button class="btn btn-danger btn-sm" onclick="clearAllData()">Clear Data</button></div>
+        <div class="setting-row"><div><div class="setting-label">Sign Out</div><div class="setting-desc">Log out of your account</div></div><button class="btn btn-outline btn-sm" onclick="doLogout()">Logout</button></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<div class="modal-overlay" id="sessionModal">
+  <div class="modal">
+    <div class="modal-title" id="sessionModalTitle">Add Study Session</div>
+    <div class="fg"><label>Subject</label><select id="sessionSubject"></select></div>
+    <div class="fg"><label>Topic</label><input type="text" id="sessionTopic" placeholder="e.g. Agile Methodologies"></div>
+    <div class="row2">
+      <div class="fg"><label>Date</label><input type="date" id="sessionDate"></div>
+      <div class="fg"><label>Time</label><input type="time" id="sessionTime"></div>
+    </div>
+    <div class="fg"><label>Duration (minutes)</label><input type="number" id="sessionDuration" value="60" min="5"></div>
+    <div class="fg"><label>Note (optional)</label><input type="text" id="sessionNote" placeholder="e.g. Focus on chapters 3–5"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('sessionModal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveSession()">Save Session</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="taskModal">
+  <div class="modal">
+    <div class="modal-title" id="taskModalTitle">Add Task</div>
+    <div class="fg"><label>Task Title</label><input type="text" id="taskTitle" placeholder="e.g. Submit lab report"></div>
+    <div class="row2">
+      <div class="fg"><label>Subject</label><select id="taskSubject"></select></div>
+      <div class="fg"><label>Priority</label><select id="taskPriority"><option>High</option><option selected>Medium</option><option>Low</option></select></div>
+    </div>
+    <div class="row2">
+      <div class="fg"><label>Deadline Date</label><input type="date" id="taskDeadline"></div>
+      <div class="fg"><label>Deadline Time</label><input type="time" id="taskDeadlineTime"></div>
+    </div>
+    <div style="background:var(--yellow-light);border:1px solid var(--yellow);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--text2);margin-bottom:14px">
+      ⚠️ Tasks past their deadline will be automatically marked as <strong>Overdue</strong>. If completed after the deadline, they'll be marked as <strong>Late</strong>.
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('taskModal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveTask()">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="goalModal">
+  <div class="modal">
+    <div class="modal-title">Add Goal</div>
+    <div class="fg"><label>Goal Description</label><input type="text" id="goalText" placeholder="e.g. Study 3 hours today"></div>
+    <div class="fg"><label>Type</label><select id="goalType"><option value="daily">Daily</option><option value="weekly">Weekly</option></select></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('goalModal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveGoal()">Add Goal</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="noteModal">
+  <div class="modal">
+    <div class="modal-title" id="noteModalTitle">Add Note</div>
+    <div class="fg"><label>Subject</label><select id="noteSubject"></select></div>
+    <div class="fg"><label>Title</label><input type="text" id="noteTitle" placeholder="Note title"></div>
+    <div class="fg"><label>Content</label><textarea id="noteContent" placeholder="Write your note here..."></textarea></div>
+    <div class="fg">
+      <label>Attach Image (optional)</label>
+      <input type="file" id="noteImageInput" accept="image/*" onchange="handleNoteImage(this)" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:var(--card);cursor:pointer;font-family:inherit">
+      <div id="noteImagePreview"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('noteModal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" style="width:auto" onclick="saveNote()">Save Note</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="systemDialogModal">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-title" id="systemDialogTitle">System Message</div>
+    <div id="systemDialogMessage" style="font-size:14px;color:var(--text);line-height:1.55"></div>
+    <div class="modal-footer" id="systemDialogFooter">
+      <button class="btn btn-outline btn-sm" id="systemDialogCancel" style="display:none" onclick="closeSystemDialog(false)">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="systemDialogOk" style="width:auto" onclick="closeSystemDialog(true)">OK</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
